@@ -45,7 +45,7 @@ function readFiles(dirname, callback) {
     async.each(filenames, function(filename, callback) {
         fs.readFile(dirname + '/' + filename, 'utf-8', function(err, content) {
             if (err) {
-                console.log('err: ', err);
+                console.error('err: ', err);
                 callback(err);
             } else {
                 if (filename.indexOf('.svg') > -1) {
@@ -90,7 +90,6 @@ function mkdir (dirpath, mode) {
 function writeFile(path, contents) {
     // Create path, if necessary.
     var dirPath = path.slice(0, path.lastIndexOf('/'));
-    console.log(dirPath);
     mkdir(dirPath);
     fs.writeFileSync(path, contents);
 }
@@ -101,19 +100,16 @@ SvgInlineNgPlugin.prototype.apply = function(compiler) {
         // compiler.plugin('emit', function(compilation, callback) {
         // compiler.plugin('compile', function(params) {
         compiler.plugin('compilation', function(compilation) {
-            console.log('YES');
             var html = headerHtml();
 
             readFiles(options.svgDir, function(err, svgHtml) {
                 if (err) {
-                    console.log('err: ', err);
+                    console.error('err: ', err);
                     callback();
                 } else {
                     var html = `${headerHtml()}${svgHtml}${footerHtml()}`;
-                    // console.log(html);
                     var filepath = `${options.writeDir}/svg-inline-ng-plugin.service.ts`;
                     writeFile(filepath, html);
-                    console.log('file written');
                     // // Insert this list into the Webpack build as a new file asset:
                     compilation.assets['svg-inline-ng-plugin.service.ts'] = {
                       source: function() {

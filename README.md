@@ -16,6 +16,7 @@ https://css-tricks.com/using-svg/
 
 ## Usage
 
+
 1. Add to webpack config:
 
 ```
@@ -26,6 +27,7 @@ new SvgInlineNgPlugin({
     writeDir: helpers.root('src', 'build')
 })
 ```
+
 
 2. Import our generated file and use the svg code.
 
@@ -44,6 +46,7 @@ And then in the html:
 ```
 <div [innerHtml]="svgCode" class="pl-icon-svg"></div>
 ```
+
 
 3. Ignore the generated file to prevent webpack build loops.
 
