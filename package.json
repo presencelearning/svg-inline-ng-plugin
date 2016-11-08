@@ -1,0 +1,14 @@
+{
+  "name": "svg-inline-ng-plugin",
+  "version": "0.0.1",
+  "author": "Luke Madera",
+  "description": "Load svg files into an angular 2 service for inline use.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/presencelearning/svg-inline-ng-plugin.git"
+  },
+  "devDependencies": {
+    "async": "^2.1.2"
+  }
+}
