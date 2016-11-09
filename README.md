@@ -18,6 +18,11 @@ https://css-tricks.com/using-svg/
 ## Usage
 
 
+### Install
+
+Add to `package.json` & `npm install`
+`"svg-inline-ng-plugin": "git+ssh://git@github.com/presencelearning/svg-inline-ng-plugin"`
+
 ### Add to webpack config:
 
 ```
