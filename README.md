@@ -25,13 +25,21 @@ Add to `package.json` & `npm install`
 
 ### Add to webpack config:
 
+
+And ignore the generated file (write directory) to prevent infinite webpack build loops.
+
 ```
 var SvgInlineNgPlugin = require('svg-inline-ng-plugin');
+var WatchIgnorePlugin = webpack.WatchIgnorePlugin;
 ...
 new SvgInlineNgPlugin({
     svgDir: helpers.root('public', 'images', 'svg'),
     writeDir: helpers.root('src', 'build')
-})
+}),
+
+new WatchIgnorePlugin([
+    helpers.root('src', 'build')
+])
 ```
 
 
@@ -52,15 +60,3 @@ And then in the html:
 ```
 <div [innerHtml]="svgCode" class="pl-icon-svg"></div>
 ```
-
-
-### Ignore the generated file to prevent webpack build loops.
-
-```
-var WatchIgnorePlugin = webpack.WatchIgnorePlugin;
-...
-new WatchIgnorePlugin([
-    helpers.root('src', 'build')
-]),
-```
-
