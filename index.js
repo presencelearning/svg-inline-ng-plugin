@@ -34,35 +34,61 @@ function footerHtml() {
     return html;
 }
 
-function readFiles(dirname, callback) {
-  fs.readdir(dirname, function(err, filenames) {
-    if (err) {
-      callback(err);
-    }
-    var svgName;
-    var svgContent;
-    var html = ``;
-    async.each(filenames, function(filename, callback) {
-        fs.readFile(dirname + '/' + filename, 'utf-8', function(err, content) {
-            if (err) {
-                console.error('err: ', err);
-                callback(err);
-            } else {
-                if (filename.indexOf('.svg') > -1) {
-                    // TODO - check for valid characters in file name? E.g. no spaces.
-                    svgName = filename.slice(0, filename.lastIndexOf('.'));
-                    svgContent = content.replace(/\n/g, '');
-                    html += `${tabChar}${tabChar}'${svgName}': {\n` + 
-                        `${tabChar}${tabChar}${tabChar}html: '${svgContent}'\n` +
-                        `${tabChar}${tabChar}},\n`;
-                }
-                callback(false);
-            }
-          });
-    }, function(err, results) {
-        callback(err, html);
+function sort2d(array1, key, order1) {
+    var order = order1 || 'ascending';
+    return array1.sort(function(a, b) {
+        if (a[key] === b[key]) {
+            return 0;
+        }
+        if ((a[key] > b[key] && order === 'ascending') ||
+         (a[key] < b[key] && order === 'descending')) {
+            return 1;
+        }
+        return -1;
     });
-  });
+}
+
+function readFiles(dirname, callback) {
+    var svgHtmlPieces = [];
+    fs.readdir(dirname, function(err, filenames) {
+        if (err) {
+          callback(err);
+        }
+
+        var svgName;
+        var svgContent;
+        var htmlPiece;
+        var html = ``;
+        var ii;
+        async.each(filenames, function(filename, callback) {
+            fs.readFile(dirname + '/' + filename, 'utf-8', function(err, content) {
+                if (err) {
+                    console.error('err: ', err);
+                    callback(err);
+                } else {
+                    if (filename.indexOf('.svg') > -1) {
+                        // TODO - check for valid characters in file name? E.g. no spaces.
+                        svgName = filename.slice(0, filename.lastIndexOf('.'));
+                        svgContent = content.replace(/\n/g, '');
+                        // Just save for now as we want to sort to ensure the SAME order each time.
+                        htmlPiece = `${tabChar}${tabChar}'${svgName}': {\n` +
+                            `${tabChar}${tabChar}${tabChar}html: '${svgContent}'\n` +
+                            `${tabChar}${tabChar}},\n`;
+                        svgHtmlPieces.push({ filename: filename, html: htmlPiece });
+                    }
+                    callback(false);
+                }
+              });
+        }, function(err, results) {
+            // NOW sort then concat html. Otherwise it leads to lots of 
+            // (false positive) file changes in git.
+            svgHtmlPieces = sort2d(svgHtmlPieces, 'filename');
+            for (ii = 0; ii < svgHtmlPieces.length; ii++) {
+                html += svgHtmlPieces[ii].html;
+            }
+            callback(err, html);
+        });
+    });
 }
 
 // https://github.com/pingyuanChen/webpack-uglify-js-plugin/blob/master/utils/file.js#L10
