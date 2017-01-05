@@ -12,6 +12,8 @@ function SvgInlineNgPlugin(options) {
 
 function headerHtml() {
     var html = `/*\n` +
+        `This is a generated file, do NOT edit it (your changes will be overwritten).\n` +
+        `To change the contents of the file, add a .svg file to the svgDir (e.g. public/images/svg) then restart webpack.\n\n` +
         `## Usage:\n` +
         `1. Optimize SVG with SVGO\n` +
         `${tabChar}1. Typically, make sure the viewbox is a square (height same as width, with icon centered).\n` +

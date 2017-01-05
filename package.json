@@ -1,6 +1,6 @@
 {
   "name": "svg-inline-ng-plugin",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Luke Madera",
   "description": "Load svg files into an angular 2 service for inline use.",
   "license": "MIT",
